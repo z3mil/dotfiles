@@ -41,3 +41,9 @@ echo "PS1='$PS1'" >> $SHELLRC
 # Add aliases
 echo "alias l='ls -lah'" >> $SHELLRC
 alias l="ls -lah"
+
+# set Pub Key Access to user
+if [ ! -d $HOME/.ssh ]; then
+  mkdir -p $HOME/.ssh;
+fi
+echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGVvVrgF7abC0Bk8KIeNLfTT+wGvHPodJkt0YkS04eNF" >> $HOME/.ssh/authorized_keys
