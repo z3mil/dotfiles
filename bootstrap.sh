@@ -2,7 +2,7 @@
 
 # Environments
 SHELLRC="/etc/profile"
-if [[ $SHELL -eq '/bin/bash' ]]; then
+if [[ "$SHELL" -eq "/bin/bash" ]]; then
   SHELLRC="$HOME/.bashrc"
 # Default PS1 variable value
 PS1="\[\033[m\]|\[\033[1;35m\]\t\[\033[m\]|\[\e[1;31m\]\u\[\e[1;36m\]\[\033[m\]@\[\e[1;36m\]\h\[\033[m\]:\[\e[0m\]\[\e[1;32m\][\W]> \[\e[0m\]"
@@ -13,7 +13,7 @@ helpFunction()
    echo ""
    echo "Usage: $0 -h hostname -p 'PS1 variable' "
    echo -e "\t-h Hostname to set"
-   echo -e "\t-p PS1 variable to set (default: $PS1)"
+   echo -e "\t-p PS1 variable to set (default: time|user@host:[dir]>)"
    exit 1
 }
 
