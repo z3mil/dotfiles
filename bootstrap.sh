@@ -10,7 +10,7 @@ PS1="\[\033[m\]|\[\033[1;35m\]\t\[\033[m\]|\[\e[1;31m\]\u\[\e[1;36m\]\[\033[m\]@
 helpFunction()
 {
    echo ""
-   echo "Usage: $0 -h hostname -p 'PS1 variable' "
+   echo "Usage: $0 [-h hostname] [-p 'PS1 variable']"
    echo -e "\t-h Hostname to set"
    echo -e "\t-p PS1 variable to set (default: time|user@host:[dir]>)"
    exit 1
@@ -23,18 +23,14 @@ if [[ $EUID -eq 0 ]]; then
 fi
 
 # Check for correct number of arguments
-if [ $# -eq 0 ]; then
-  helpFunction
-else
-  while getopts "h:p:" opt
-  do
-    case "$opt" in
-      h ) HOSTNAME="$OPTARG" ;;
-      p ) PS1="$OPTARG" ;;
-      ? ) helpFunction ;;
-    esac
-  done
-fi
+while getopts "h:p:" opt
+do
+  case "$opt" in
+    h ) HOSTNAME="$OPTARG" ;;
+    p ) PS1="$OPTARG" ;;
+    ? ) helpFunction ;;
+  esac
+done
 
 # Set hostname
 hostnamectl set-hostname "$HOSTNAME"
