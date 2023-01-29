@@ -37,8 +37,7 @@ hostnamectl set-hostname "$HOSTNAME"
 
 # Set PS1 variable
 echo "PS1='$PS1'" >> $SHELLRC
-export "PS1='$PS1'"
 
 # Add aliases
 echo "alias l='ls -lah'" >> $SHELLRC
-export "alias l='ls -lah'"
+alias l="ls -lah"
