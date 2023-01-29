@@ -1,11 +1,9 @@
 #!/bin/bash
 
-# Check if we are running as root
-if [[ $EUID -ne 0 ]]; then
-  echo "This script must be run as root"
-  exit 1
-fi
-
+# Environments
+SHELLRC="/etc/profile"
+if [[ $SHELL -eq '/bin/bash' ]]; then
+  SHELLRC="$HOME/.bashrc"
 # Default PS1 variable value
 PS1="\[\033[m\]|\[\033[1;35m\]\t\[\033[m\]|\[\e[1;31m\]\u\[\e[1;36m\]\[\033[m\]@\[\e[1;36m\]\h\[\033[m\]:\[\e[0m\]\[\e[1;32m\][\W]> \[\e[0m\]"
 
@@ -19,30 +17,33 @@ helpFunction()
    exit 1
 }
 
+# Check if we are running as non-root user
+if [[ $EUID -eq 0 ]]; then
+  echo "This script must NOT be run as root"
+  exit 1
+fi
+
 # Check for correct number of arguments
-while getopts "h:p:" opt
-do
-   case "$opt" in
+if [ $# -eq 0 ]; then
+  helpFunction
+else
+  while getopts "h:p:" opt
+  do
+    case "$opt" in
       h ) HOSTNAME="$OPTARG" ;;
       p ) PS1="$OPTARG" ;;
       ? ) helpFunction ;;
-   esac
-done
-
-# Check if the HOSTNAME environment variable is set
-if [[ -z "$HOSTNAME" ]]; then
-  echo "HOSTNAME environment variable must be set"
-  exit 1
+    esac
+  done
 fi
 
 # Set hostname
 hostnamectl set-hostname "$HOSTNAME"
 
 # Set PS1 variable
-echo "PS1='$PS1'" >> /etc/profile
+echo "PS1='$PS1'" >> $SHELLRC
+export "PS1='$PS1'"
 
 # Add aliases
-echo "alias l='ls -lah'" >> /etc/profile
-
-# Apply changes
-source /etc/profile
+echo "alias l='ls -lah'" >> $SHELLRC
+export "alias l='ls -lah'"
