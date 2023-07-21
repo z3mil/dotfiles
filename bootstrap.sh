@@ -50,7 +50,6 @@ echo "PS1='$PS1'" >> $SHELLRC
 echo "alias l='ls -lah'" >> $SHELLRC
 alias l="ls -lah"
 
-
 # set Pub Key Access to user if unprivileged
 if [ ! -d $HOME/.ssh ]; then
   mkdir -p $HOME/.ssh; chmod 700 $HOME/.ssh;
