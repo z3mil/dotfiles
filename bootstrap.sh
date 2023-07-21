@@ -20,9 +20,9 @@ helpFunction()
 
 # Check if we are running as non-root user
 if [[ $EUID -eq 0 ]]; then
-  echo "This script must NOT be run as root"
-  helpFunction
-  exit 1
+  echo "WARNING: This script is run as root"
+  # helpFunction
+  # exit 1
 fi
 
 # Check for correct number of arguments
