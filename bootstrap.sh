@@ -56,5 +56,6 @@ if [ ! -d $HOME/.ssh ]; then
   mkdir -p $HOME/.ssh; chmod 700 $HOME/.ssh;
   if [ $IAMROOT = false ]; then
      echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGVvVrgF7abC0Bk8KIeNLfTT+wGvHPodJkt0YkS04eNF" >> $HOME/.ssh/authorized_keys
-     chmod 600 $HOME/.ssh/authorized_keys 
+     chmod 600 $HOME/.ssh/authorized_keys
+  fi
 fi
