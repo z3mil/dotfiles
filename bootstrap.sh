@@ -20,7 +20,11 @@ helpFunction()
 
 # Check if we are running as non-root user
 if [[ $EUID -eq 0 ]]; then
-  echo "WARNING: This script is run as root"
+  echo "WARNING: This script is run as root - SSH access as root is not allowed, skipping public key step."
+  IAMROOT=true
+else
+  echo "INFO: This script is run as $USER."
+  IAMROOT=false
   # helpFunction
   # exit 1
 fi
@@ -46,9 +50,11 @@ echo "PS1='$PS1'" >> $SHELLRC
 echo "alias l='ls -lah'" >> $SHELLRC
 alias l="ls -lah"
 
-# set Pub Key Access to user
+
+# set Pub Key Access to user if unprivileged
 if [ ! -d $HOME/.ssh ]; then
   mkdir -p $HOME/.ssh; chmod 700 $HOME/.ssh;
+  if [ $IAMROOT = false ]; then
+     echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGVvVrgF7abC0Bk8KIeNLfTT+wGvHPodJkt0YkS04eNF" >> $HOME/.ssh/authorized_keys
+     chmod 600 $HOME/.ssh/authorized_keys 
 fi
-echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGVvVrgF7abC0Bk8KIeNLfTT+wGvHPodJkt0YkS04eNF" >> $HOME/.ssh/authorized_keys
-chmod 600 $HOME/.ssh/authorized_keys
