@@ -8,6 +8,7 @@ PS1="\[\033[m\]|\[\033[1;35m\]\t\[\033[m\]|\[\e[1;31m\]\u\[\e[1;36m\]\[\033[m\]@
 USER=`whoami`
 # script colors
 GREEN=$(tput setaf 2)
+BLUE=$(tput setaf 4)
 RED=$(tput setaf 1)
 NC=$(tput sgr0)
 
@@ -51,24 +52,24 @@ fi
 ### Main execution ###
 ######################
 if [ ! -d $HOME/.ssh ]; then
-  echo "INFO: checking/creating dot ssh folder.."
+  echo "${BLUE}INFO: checking/creating dot ssh folder..${NC}"
   mkdir -p $HOME/.ssh; chmod 700 $HOME/.ssh;
 fi
 if [ $IAMROOT = false ]; then
-     echo "INFO: This script is run as $USER. make sure to run as root the first time."
+     echo "${BLUE}INFO: This script is run as $USER. make sure to run as root the first time.${NC}"
      # set Pub Key Access to user if unprivileged
      echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGVvVrgF7abC0Bk8KIeNLfTT+wGvHPodJkt0YkS04eNF" >> $HOME/.ssh/authorized_keys
      chmod 600 $HOME/.ssh/authorized_keys
 else
-     echo "INFO: This script is run as root."
+     echo "${BLUE}INFO: This script is run as root.${NC}"
      # Required packages when run as root
      packagesNeeded='curl sudo vim'
      if [ -x "$(command -v apt-get)" ]; then apt-get install -y $packagesNeeded
      elif [ -x "$(command -v dnf)" ]; then dnf install -y $packagesNeeded
      else echo "${RED}FAILED TO INSTALL PACKAGE: Package manager not found. You must manually install: $packagesNeeded${NC}">&2; fi
-     echo "INFO: SSH access as root is not allowed, skipping public key step.."
+     echo "${BLUE}INFO: SSH access as root is not allowed, skipping public key step..${NC}"
      # Set hostname
-     echo "INFO: Setting HOSTNAME.."
+     echo "${BLUE}INFO: Setting HOSTNAME..${NC}"
      hostnamectl set-hostname "$HOSTNAME"
 fi
 
