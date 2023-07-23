@@ -8,7 +8,7 @@ PS1="\[\033[m\]|\[\033[1;35m\]\t\[\033[m\]|\[\e[1;31m\]\u\[\e[1;36m\]\[\033[m\]@
 USER=`whoami`
 # script colors
 GREEN=$(tput setaf 2)
-BLUE=$(tput setaf 4)
+BLUE=$(tput setaf 6)
 RED=$(tput setaf 1)
 NC=$(tput sgr0)
 
