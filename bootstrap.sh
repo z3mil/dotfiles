@@ -51,23 +51,25 @@ fi
 ### Main execution ###
 ######################
 if [ ! -d $HOME/.ssh ]; then
+  echo "INFO: checking/creating dot ssh folder.."
   mkdir -p $HOME/.ssh; chmod 700 $HOME/.ssh;
-  if [ $IAMROOT = false ]; then
+fi
+if [ $IAMROOT = false ]; then
      echo "INFO: This script is run as $USER. make sure to run as root the first time."
      # set Pub Key Access to user if unprivileged
      echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGVvVrgF7abC0Bk8KIeNLfTT+wGvHPodJkt0YkS04eNF" >> $HOME/.ssh/authorized_keys
      chmod 600 $HOME/.ssh/authorized_keys
-  else
+else
      echo "INFO: This script is run as root."
      # Required packages when run as root
-     packagesNeeded='curl sudo vim '
-     elif [ -x "$(command -v apt-get)" ]; then apt-get install -y $packagesNeeded
-     elif [ -x "$(command -v dnf)" ];     then dnf install -y $packagesNeeded
+     packagesNeeded='curl sudo vim'
+     if [ -x "$(command -v apt-get)" ]; then apt-get install -y $packagesNeeded
+     elif [ -x "$(command -v dnf)" ]; then dnf install -y $packagesNeeded
      else echo "${RED}FAILED TO INSTALL PACKAGE: Package manager not found. You must manually install: $packagesNeeded${NC}">&2; fi
      echo "INFO: SSH access as root is not allowed, skipping public key step.."
      # Set hostname
      echo "INFO: Setting HOSTNAME.."
      hostnamectl set-hostname "$HOSTNAME"
-  fi
 fi
+
 echo "${GREEN}SUCCESS: Script executed successfully.${NC}"
