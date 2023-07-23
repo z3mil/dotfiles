@@ -6,6 +6,7 @@
 SHELLRC="$HOME/.bashrc"
 PS1="\[\033[m\]|\[\033[1;35m\]\t\[\033[m\]|\[\e[1;31m\]\u\[\e[1;36m\]\[\033[m\]@\[\e[1;36m\]\h\[\033[m\]:\[\e[0m\]\[\e[1;32m\][\W]> \[\e[0m\]"
 USER=`whoami`
+# script colors
 GREEN=$(tput setaf 2)
 RED=$(tput setaf 1)
 NC=$(tput sgr0)
@@ -20,15 +21,6 @@ helpFunction()
 #    echo -e "\t-u user to set"
    exit 1
 }
-
-# Check if we are running as non-root user
-if [[ $EUID -eq 0 ]]; then
-  echo "INFO: This script is run as root."
-  IAMROOT=true
-else
-  echo "INFO: This script is run as $USER. run as root to set Hostname."
-  IAMROOT=false
-fi
 
 # Check for correct number of arguments
 while getopts "h:p:u:" opt
@@ -48,13 +40,30 @@ echo "PS1='$PS1'" >> $SHELLRC
 echo "alias l='ls -lah'" >> $SHELLRC
 alias l="ls -lah"
 
-# set Pub Key Access to user if unprivileged
+# Check if we are running as non-root user
+if [[ $EUID -eq 0 ]]; then
+  IAMROOT=true
+else
+  IAMROOT=false
+fi
+
+######################
+### Main execution ###
+######################
 if [ ! -d $HOME/.ssh ]; then
   mkdir -p $HOME/.ssh; chmod 700 $HOME/.ssh;
   if [ $IAMROOT = false ]; then
+     echo "INFO: This script is run as $USER. make sure to run as root the first time."
+     # set Pub Key Access to user if unprivileged
      echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGVvVrgF7abC0Bk8KIeNLfTT+wGvHPodJkt0YkS04eNF" >> $HOME/.ssh/authorized_keys
      chmod 600 $HOME/.ssh/authorized_keys
   else
+     echo "INFO: This script is run as root."
+     # Required packages when run as root
+     packagesNeeded='curl sudo vim '
+     elif [ -x "$(command -v apt-get)" ]; then apt-get install -y $packagesNeeded
+     elif [ -x "$(command -v dnf)" ];     then dnf install -y $packagesNeeded
+     else echo "${RED}FAILED TO INSTALL PACKAGE: Package manager not found. You must manually install: $packagesNeeded${NC}">&2; fi
      echo "INFO: SSH access as root is not allowed, skipping public key step.."
      # Set hostname
      echo "INFO: Setting HOSTNAME.."
